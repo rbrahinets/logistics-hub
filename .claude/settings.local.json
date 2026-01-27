@@ -1,11 +1,20 @@
 {
+  "env": {
+    "MAX_THINKING_TOKENS": "32000"
+  },
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(find:*)",
+      "Bash(done)",
+      "Bash(git rev-parse:*)",
+      "Bash(./gradlew compileJava:*)",
+      "Bash(./gradlew test:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew jacocoTestReport:*)",
+      "Bash(./gradlew jacocoTestCoverageVerification:*)"
+    ],
     "deny": [],
     "ask": []
   },
-  "enableAllProjectMcpServers": false,
-  "env": {
-    "MAX_THINKING_TOKENS": "32000"
-  }
+  "enableAllProjectMcpServers": false
 }
