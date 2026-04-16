@@ -61,3 +61,6 @@ out/
 ### VS Code ###
 .vscode/
 
+PATH_TO_PLAN.md
+PATH_TO_RESEARCH_OUTPUT.md
+issue.txt
