@@ -1,0 +1,106 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.7'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
+}
+
+group = 'com.translogistics.hub'
+version = '0.0.1'
+description = 'Logistics Hub Application'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	postgresqlVersion = '42.7.8'
+	flywayVersion = '11.0.0'
+	hibernateVersion = '6.4.1.Final'
+	hikariVersion = '7.0.2'
+	mapstructVersion = '1.5.5.Final'
+	jjwtVersion = '0.12.3'
+	springdocVersion = '2.3.0'
+	testcontainersVersion = '1.19.3'
+    h2Version = '2.2.224'
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	implementation "org.hibernate.orm:hibernate-core:${hibernateVersion}"
+	implementation "org.hibernate.orm:hibernate-envers:${hibernateVersion}"
+	implementation 'org.springframework:spring-orm'
+	implementation "com.zaxxer:HikariCP:${hikariVersion}"
+
+	implementation "org.postgresql:postgresql:${postgresqlVersion}"
+	runtimeOnly "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
+	implementation "org.flywaydb:flyway-core:${flywayVersion}"
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	testRuntimeOnly "com.h2database:h2:${h2Version}"
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testImplementation 'org.mockito:mockito-junit-jupiter'
+	testImplementation 'org.assertj:assertj-core'
+	testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+	testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+	toolVersion = '0.8.11'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.80
+			}
+		}
+	}
+}
